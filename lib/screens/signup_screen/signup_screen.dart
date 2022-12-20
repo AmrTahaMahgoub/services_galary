@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:services_galary/bloc/LoginBloc/login_bloc.dart';
 import 'package:services_galary/bloc/signupbloc/sign_up_bloc.dart';
+import 'package:services_galary/models/get_all_cities_model.dart';
 import 'package:services_galary/repository/auth/signup_repo.dart';
 
 import 'package:services_galary/screens/loginscreen/login_screen.dart';
@@ -20,7 +22,7 @@ import 'package:services_galary/resourses/app_string.dart';
 import 'package:services_galary/resourses/app_style.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,9 +38,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController cityidController = TextEditingController();
+  //TextEditingController cityidController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  /**** */
+  int? cityId;
+  List citiesList = [];
 
+  Future getAllCities() async {
+    var response =
+        await http.get(Uri.parse('https://api.monoservices.net/v1/cities/'));
+    var data = response.body;
+    // log('response body ${data}');
+    var allCities = AllCitiesList.fromJson(jsonDecode(data)).allCitiesList;
+
+   // log('${allCities}');
+    setState(() {
+      citiesList = allCities;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAllCities();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,16 +119,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 0).r,
-                child: CustomTextFeild(
-                    controller: cityidController,
-                    label: AppStringManager.cityId,
-                    validation: (value) {
-                      if (value!.isEmpty || value == null) {
-                        return AppStringManager.feildRequired;
-                      } else {
-                        return null;
-                      }
-                    }),
+                child: DropdownButton(
+                    hint: Text('city name'),
+                    value: cityId,
+                    items: citiesList
+                        .map((e) => DropdownMenuItem(
+                              child: Text('${e['name']}'),
+                              value: e['id'],
+                            ))
+                        .toList(),
+                    onChanged: ((newvalue) {
+                      cityId = newvalue as int?;
+                      print('$cityId');
+                      getAllCities();
+                    })),
               ),
               Container(
                   height: 70.h,
@@ -112,12 +140,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: BlocConsumer<SignUpBloc, SignUpState>(
                     listener: (context, state) async {
                       if (state is SignUpLoading) {
-                         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('loading....')));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('loading....')));
                       } else if (state is SignUpSuccess) {
                         var saveSignUptoken = await CacheHelper.saveData(
                             "signuptoken", state.userModel.data!.token);
-                            
 
                         if (saveSignUptoken != null) {
                           Navigator.push(
@@ -138,8 +165,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       } else if (state is SignUpwithEmailError) {
                         log('emaaaaaaaaaaaaaaaail error${state.emailError.email![0]}}');
 
-                        var snackBar =
-                            SnackBar(content: Text('${state.emailError.email![0]}'));
+                        var snackBar = SnackBar(
+                            content: Text('${state.emailError.email![0]}'));
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
                     },
@@ -155,7 +182,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       nameController.text,
                                       emailController.text,
                                       passwordController.text,
-                                      cityidController.text));
+                                      cityId!,
+                                      ));
                             }
                           },
                           textStyle: AppTextStyleManager.bold15);

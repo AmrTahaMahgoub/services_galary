@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class SignUpRepository {
   Future<UserModel> signupData(
-      String name, String email, String password, String cityid) async {
+      String name, String email, String password, int cityid) async {
     http.Response response = await http.post(
         Uri.parse('https://api.monoservices.net/v1/auth/register'),
         body: jsonEncode({
@@ -28,7 +28,7 @@ class SignUpRepository {
 
 class EmailandPasswordRepo {
   Future<EmailAnPasswordErrorModel> signupEmailandPassworderror(
-      String name, String email, String password, String cityid) async {
+      String name, String email, String password, int cityid) async {
     http.Response response = await http.post(
         Uri.parse('https://api.monoservices.net/v1/auth/register'),
         body: jsonEncode({
@@ -51,7 +51,7 @@ class EmailandPasswordRepo {
 
 class EmailRepo {
   Future<EmailErrorsModel> signupRepeatedEmail(
-      String name, String email, String password, String cityid) async {
+      String name, String email, String password, int cityid) async {
     http.Response response = await http.post(
         Uri.parse('https://api.monoservices.net/v1/auth/register'),
         body: jsonEncode({

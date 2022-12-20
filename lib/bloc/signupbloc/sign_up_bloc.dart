@@ -25,19 +25,19 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         var user = token.data!.token;
         emit(SignUpSuccess(token));
 
-        var emailandPasswordError =
-            await repeatedEmailrepo.signupEmailandPassworderror(
-                event.name, event.email, event.password, event.cityId);
-        emit(SignUpEmailandPaswwordError(emailandPasswordError));
+        // var emailandPasswordError =
+        //     await repeatedEmailrepo.signupEmailandPassworderror(
+        //         event.name, event.email, event.password, event.cityId);
+        // emit(SignUpEmailandPaswwordError(emailandPasswordError));
 
-        if (user == null) {
-          var emailError = await emailRepo.signupRepeatedEmail(
-              event.name, event.email, event.password, event.cityId);
+        // if (user == null) {
+        //   var emailError = await emailRepo.signupRepeatedEmail(
+        //       event.name, event.email, event.password, event.cityId);
 
-          emit(SignUpwithEmailError(emailError));
-        } else {
-          emit(SignUpSuccess(token));
-        }
+        //   emit(SignUpwithEmailError(emailError));
+        // } else {
+        //   emit(SignUpSuccess(token));
+        // }
       } catch (e) {
         print('********************${e.toString()}');
       }

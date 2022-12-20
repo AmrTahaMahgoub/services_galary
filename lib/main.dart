@@ -10,6 +10,7 @@ import 'package:services_galary/repository/all_services_repo.dart';
 import 'package:services_galary/repository/auth/login_repo.dart';
 import 'package:services_galary/repository/auth/signup_repo.dart';
 import 'package:services_galary/repository/create_service_repo.dart';
+import 'package:services_galary/repository/get_my_data_service_repo.dart';
 import 'package:services_galary/repository/get_my_services_repo.dart';
 
 import 'package:services_galary/screens/home_page_screen/home_page_screen.dart';
@@ -45,26 +46,29 @@ class MyApp extends StatelessWidget {
                   LoginBlocBloc(LoginRepository()),
             ),
             BlocProvider<AllServicesBloc>(
-              
-              create: (BuildContext context) =>
-                  AllServicesBloc(GetAllDataRepo())..add(AllServicesLoadedEvent())
-            ),
-         
+                create: (BuildContext context) =>
+                    AllServicesBloc(GetAllDataRepo())
+                      ..add(AllServicesLoadedEvent())),
             BlocProvider<CreateSreviceBloc>(
               create: (BuildContext context) =>
                   CreateSreviceBloc(CreateServiceRepo()),
             ),
-              BlocProvider<GetMyServiceBloc>(
+            BlocProvider<GetMyServiceBloc>(
               create: (BuildContext context) =>
-                  GetMyServiceBloc(GetMyServicesRepo())..add(GetMyServicesSuccessEvent()),
+                  GetMyServiceBloc(GetMyDataServicesRepo())
+                    ..add(GetMyServicesSuccessEvent()),
             ),
-              BlocProvider<AllCategoriesBloc>(
+            BlocProvider<AllCategoriesBloc>(
               create: (BuildContext context) =>
-                  AllCategoriesBloc(GetAllCategoriesRepo())..add(AllCategoriesEventSuccess()),
+                  AllCategoriesBloc(GetAllCategoriesRepo())
+                    ..add(AllCategoriesEventSuccess()),
+            ),
+            BlocProvider<CreateSreviceBloc>(
+              create: (BuildContext context) =>
+                  CreateSreviceBloc(CreateServiceRepo()),
             ),
           ],
-          child: MaterialApp
-          (
+          child: MaterialApp(
           //  home: TestScreen(),
             debugShowCheckedModeBanner: false,
             theme: ThemeData(

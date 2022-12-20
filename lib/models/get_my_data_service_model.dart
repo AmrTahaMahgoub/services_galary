@@ -1,30 +1,15 @@
-class GetMyServicesModel {
-  String? message;
-  List<Data>? data;
+class MyUserData {
+  final List<dynamic> myuserData;
 
-  GetMyServicesModel({this.message, this.data});
-
-  GetMyServicesModel.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
+  MyUserData({required this.myuserData});
+  factory MyUserData.fromJson(Map<String, dynamic> json) {
+    return MyUserData(myuserData: json['data']);
   }
 }
 
-class Data {
+
+
+class GetMyDataSevice {
   int? id;
   String? name;
   String? description;
@@ -36,7 +21,7 @@ class Data {
   String? createdAt;
   String? status;
 
-  Data(
+  GetMyDataSevice(
       {this.id,
       this.name,
       this.description,
@@ -48,7 +33,7 @@ class Data {
       this.createdAt,
       this.status});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  GetMyDataSevice.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     description = json['description'];
@@ -82,10 +67,10 @@ class Data {
 }
 
 class Provider {
-  Null? firstName;
-  Null? lastName;
+  String? firstName;
+  String? lastName;
   String? email;
-  Null? phoneNumber;
+  String? phoneNumber;
 
   Provider({this.firstName, this.lastName, this.email, this.phoneNumber});
 

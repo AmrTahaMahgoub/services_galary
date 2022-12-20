@@ -45,8 +45,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-  
   }
 
   @override
@@ -198,123 +196,130 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     ],
                   ),
                 ),
-           SizedBox(height: 150.h,
-             child: BlocConsumer<AllServicesBloc, AllServicesState>(
-          listener: (context, state) {
-          if (state is AllServicesLoadingState) {
-        ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(state.message)));
-          } else if (state is AllServicesSuccessState && state.allData.isEmpty) {
-        ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('No more users')));
-          } else if (state is AllServicesErrorState) {
-        ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(state.message)));
-        BlocProvider.of<AllServicesBloc>(context).isFetching = false;
-          }
-          return;
-        }, builder: (context, state) {
-          if (state is AllServicesInitial ||
-          state is AllServicesLoadingState && newData.isEmpty) {
-        return Container(child: Center(child: CircularProgressIndicator()));
-          } else if (state is AllServicesSuccessState) {
-        newData.addAll(state.allData);
-        BlocProvider.of<AllServicesBloc>(context).isFetching = false;
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          } else if (state is AllServicesErrorState && newData.isEmpty) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-              IconButton(
-                onPressed: () {
-                  BlocProvider.of<AllServicesBloc>(context)
-                    ..isFetching = true
-                    ..add(AllServicesLoadedEvent());
-                },
-                icon: Icon(Icons.refresh),
-              ),
-              const SizedBox(height: 15),
-              Text(state.message, textAlign: TextAlign.center),
-          ],
-        );
-          }
-
-          return ListView.builder(
-          
-              controller: _scrollController
-                ..addListener(() {
-                  if (_scrollController.offset ==
-                          _scrollController.position.maxScrollExtent &&
-                      !BlocProvider.of<AllServicesBloc>(context).isFetching) {
-                    BlocProvider.of<AllServicesBloc>(context)
-                      ..isFetching = true
-                      ..add(AllServicesLoadedEvent());
-                  }
-                }),
-               // physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-              itemCount: newData.length,
-              itemBuilder: (context, index) =>Container(
-                      padding: EdgeInsets.all(2).r,
-                      
-                      height: 80.h,
-                      width: double.infinity,
-                      child: Row(
+                SizedBox(
+                  height: 150.h,
+                  child: BlocConsumer<AllServicesBloc, AllServicesState>(
+                      listener: (context, state) {
+                    if (state is AllServicesLoadingState) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(state.message)));
+                    } else if (state is AllServicesSuccessState &&
+                        state.allData.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('No more users')));
+                    } else if (state is AllServicesErrorState) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(state.message)));
+                      BlocProvider.of<AllServicesBloc>(context).isFetching =
+                          false;
+                    }
+                    return;
+                  }, builder: (context, state) {
+                    if (state is AllServicesInitial ||
+                        state is AllServicesLoadingState && newData.isEmpty) {
+                      return Container(
+                          child: Center(child: CircularProgressIndicator()));
+                    
+                    } else if (state is AllServicesSuccessState) {
+                      newData.addAll(state.allData);
+                      BlocProvider.of<AllServicesBloc>(context).isFetching =
+                          false;
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    } else if (state is AllServicesErrorState &&
+                        newData.isEmpty) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset('assets/images/space_joy.jpg'),
-                          Column(
-                            children: [
-                              Text('${newData[index].id}'),
-                              Text('${newData[index].category}'),
-                              Text('${newData[index].description}'),
-                            ],
+                          IconButton(
+                            onPressed: () {
+                              BlocProvider.of<AllServicesBloc>(context)
+                                ..isFetching = true
+                                ..add(AllServicesLoadedEvent());
+                            },
+                            icon: Icon(Icons.refresh),
                           ),
-                          Spacer(),
-                          Column(
-                            children: [
-                              Text('${newData[index].price}'),
-                              Spacer(),
-                              RatingBar.builder(
-                                itemSize: 15,
-                                initialRating: 3,
-                                minRating: 1,
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 4,
-                                itemBuilder: (context, _) => Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                ),
-                                onRatingUpdate: (rating) {
-                                  print(rating);
-                                },
-                              ),
-                              Spacer(),
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  width: 68.0.w,
-                                  height: 35.0.h,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius: BorderRadius.circular(6.0).r,
-                                  ),
-                                  child: Center(
-                                    child: Text('Book',
-                                        style: AppTextStyleManager
-                                            .bookTextButtonStyle),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          const SizedBox(height: 15),
+                          Text(state.message, textAlign: TextAlign.center),
                         ],
+                      );
+                    }
+
+                    return ListView.builder(
+                      controller: _scrollController
+                        ..addListener(() {
+                          if (_scrollController.offset ==
+                                  _scrollController.position.maxScrollExtent &&
+                              !BlocProvider.of<AllServicesBloc>(context)
+                                  .isFetching) {
+                            BlocProvider.of<AllServicesBloc>(context)
+                              ..isFetching = true
+                              ..add(AllServicesLoadedEvent());
+                          }
+                        }),
+                      // physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: newData.length,
+                      itemBuilder: (context, index) => Container(
+                        padding: EdgeInsets.all(2).r,
+                        height: 80.h,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Image.asset('assets/images/space_joy.jpg'),
+                            Column(
+                              children: [
+                                Text('${newData[index].id}'),
+                                Text('${newData[index].category}'),
+                                Text('${newData[index].description}'),
+                              ],
+                            ),
+                            Spacer(),
+                            Column(
+                              children: [
+                                Text('${newData[index].price}'),
+                                Spacer(),
+                                RatingBar.builder(
+                                  itemSize: 15,
+                                  initialRating: 3,
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 4,
+                                  itemBuilder: (context, _) => Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  },
+                                ),
+                                Spacer(),
+                                InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    width: 68.0.w,
+                                    height: 35.0.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius:
+                                          BorderRadius.circular(6.0).r,
+                                    ),
+                                    child: Center(
+                                      child: Text('Book',
+                                          style: AppTextStyleManager
+                                              .bookTextButtonStyle),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-          );
-        }),
-           )
+                    );
+                  }),
+                )
               ],
             ),
           ],

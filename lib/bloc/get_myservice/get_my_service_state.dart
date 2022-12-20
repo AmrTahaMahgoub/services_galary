@@ -13,5 +13,5 @@ class GetMyServiceLoadingState extends GetMyServiceState {}
 
 class GetMyServiceSuccessState extends GetMyServiceState {
   GetMyServiceSuccessState(this.getMyServicesModel);
-  GetMyServicesModel getMyServicesModel;
+  List<GetMyDataSevice> getMyServicesModel;
 }

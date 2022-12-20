@@ -15,10 +15,10 @@ class GetAllDataRepo {
         .get(Uri.parse('https://api.monoservices.net/v1/services?page=$page'));
     var data = response.body;
     Users users = Users.fromJson(jsonDecode(data));
-    log('tryer data ..........$data');
+  //  log('tryer data ..........$data');
     List<AllServicesTryerModel> usersInfo =
         users.users.map((e) => AllServicesTryerModel.fromJson(e)).toList();
-    log('${usersInfo}');
+   // log('${usersInfo}');
     
 
     return usersInfo;

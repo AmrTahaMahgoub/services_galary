@@ -10,7 +10,7 @@ class SignUpSuccessEvent extends SignUpEvent {
   String name;
   String email;
   String password;
-  String cityId;
+  int cityId;
   SignUpSuccessEvent(this.name, this.email, this.password, this.cityId);
 
 }

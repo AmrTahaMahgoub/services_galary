@@ -7,6 +7,8 @@ import 'package:services_galary/utlis/cash_helper.dart';
 import 'package:http/http.dart' as http;
 
 class CreateServiceRepo {
+  //signuptoken
+// List< Map<dynamic, dynamic>> data = [{'living': 1},{ 'slepping': 2}];
   String gettoken = CacheHelper.getData('logintoken');
   Future<CreateServiceModel> createService(
     String name,
@@ -27,10 +29,10 @@ class CreateServiceRepo {
           'Authorization': 'Bearer $gettoken',
           'Content-Type': 'application/json'
         },
-        Uri.parse(addService));
+        Uri.parse('https://api.monoservices.net/v1/services/add'));
     var message = CreateServiceModel.fromJson(jsonDecode(response.body));
-    log('post service in create service repo ${response.body}');
-    log('create service repo  $message');
+   // log('post service in create service repo ${response.body}');
+//log('create service repo  $message');
     return message;
   }
 }

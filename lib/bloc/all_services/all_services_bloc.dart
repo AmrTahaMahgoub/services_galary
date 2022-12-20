@@ -24,7 +24,7 @@ class AllServicesBloc extends Bloc<AllServicesEvent, AllServicesState> {
 
       emit(AllServicesSuccessState(allData));
       page = page + 1;
-     // log('${page++}');
+     
     });
   }
 }

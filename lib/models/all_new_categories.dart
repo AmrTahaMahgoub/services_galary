@@ -1,38 +1,24 @@
-class AllCategoriesModel {
-  String? message;
-  List<Data>? data;
+class CategoriesDataList {
+  final List<dynamic> categoriesDataList;
 
-  AllCategoriesModel({this.message, this.data});
-
-  AllCategoriesModel.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
+  CategoriesDataList({required this.categoriesDataList});
+  factory CategoriesDataList.fromJson(Map<String, dynamic> json) {
+    return CategoriesDataList(categoriesDataList: json['data']);
   }
 }
 
-class Data {
+
+
+
+class CategoriesData {
   int? id;
   String? name;
   String? headerImage;
   List<SubCategories>? subCategories;
 
-  Data({this.id, this.name, this.headerImage, this.subCategories});
+  CategoriesData({this.id, this.name, this.headerImage, this.subCategories});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  CategoriesData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     headerImage = json['header_image'];

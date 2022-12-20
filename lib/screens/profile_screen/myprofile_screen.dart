@@ -23,6 +23,12 @@ class MyProfileScreen extends StatefulWidget {
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
   @override
+  void initState() {
+    
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -93,11 +99,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     title: 'setting',
                   ),
                   CustomProfileInfo(
-                    onTap: () {
-                      // CacheHelper.getData('logintoken');
-                      // setState(() {});
-                       CacheHelper.removeData('logintoken');
-                      Navigator.popAndPushNamed(context, Log_In);
+                    onTap: ()async {
+                    
+                      await CacheHelper.removeData('logintoken');
+
+                     await Navigator.popAndPushNamed(context, Log_In);
                     },
                     icondata: Icons.logout,
                     title: 'sign out',
