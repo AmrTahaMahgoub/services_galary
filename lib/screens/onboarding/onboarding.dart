@@ -37,14 +37,11 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   var token = CacheHelper.getData('logintoken');
 
-
   int pageIndex = 0;
   final pageController = PageController(initialPage: 0);
   @override
- void initState() {
-   
+  void initState() {
     super.initState();
- 
   }
 
   @override
@@ -70,13 +67,16 @@ class _OnboardingState extends State<Onboarding> {
                   },
                   children: [
                     // Here I'm calling my image with text method for rendering
-      
+
                     _centerImageWithText(
-                        image: AppImagesManager.onboardingOne, text: AppStringManager.onboardingText1),
+                        image: AppImagesManager.onboardingOne,
+                        text: AppStringManager.onboardingText1),
                     _centerImageWithText(
-                        image: AppImagesManager.onboardingTwo, text: AppStringManager.onboardingText2),
+                        image: AppImagesManager.onboardingTwo,
+                        text: AppStringManager.onboardingText2),
                     _centerImageWithText(
-                        image: AppImagesManager.onboardingThree, text: AppStringManager.onboardingText3),
+                        image: AppImagesManager.onboardingThree,
+                        text: AppStringManager.onboardingText3),
                   ],
                 ),
               ),
@@ -86,18 +86,37 @@ class _OnboardingState extends State<Onboarding> {
                   for (int i = 0; i < 3; i++)
                     Padding(
                       padding: const EdgeInsets.all(8.0).w,
-      
+
                       // Here I'm calling my dot indicator method for redering dot
                       // Also I wrote a ternary condition for changing dots color and its size
                       child: _indicatorDotsWidget(
-                          color: pageIndex == i ? ColorManager.PRIMARY_COLOR : ColorManager.WHITE_COLOR,
+                          color: pageIndex == i
+                              ? ColorManager.PRIMARY_COLOR
+                              : ColorManager.WHITE_COLOR,
                           width: pageIndex == i ? 24 : 10),
                     ),
                 ],
               ),
-      
-              //This is our get started button
-      
+              // Container(
+              //   margin: const EdgeInsets.all(15.0),
+              //   padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              //   decoration: BoxDecoration(
+              //       color: ColorManager.WHITE_COLOR,
+              //       border: Border.all(color: Colors.white)),
+              //   child: DropdownButton(
+              //     dropdownColor: ColorManager.PRIMARY_COLOR,
+              //     style: TextStyle(
+              //       color: Colors.black,
+              //       backgroundColor: Colors.white,
+              //     ),
+              //     value: 'ar',
+              //     items: [
+              //       DropdownMenuItem(child: Text('English'), value: 'en'),
+              //       DropdownMenuItem(child: Text('العربية'), value: 'ar'),
+              //     ],
+              //     onChanged: (String? value) {},
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.only(top: 20, bottom: 15).r,
                 child: SizedBox(
@@ -117,10 +136,8 @@ class _OnboardingState extends State<Onboarding> {
                       style: AppTextStyleManager.bold14,
                     ),
                     onPressed: () => {
-                     
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, Log_In, (route) => false),
-                        
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, Log_In, (route) => false),
                     },
                   ),
                 ),
@@ -150,8 +167,6 @@ class _OnboardingState extends State<Onboarding> {
       ],
     );
   }
-
-  // Method for dots
 
   Container _indicatorDotsWidget(
       {required Color color, required double width}) {

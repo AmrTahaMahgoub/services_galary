@@ -2,7 +2,7 @@ import 'package:services_galary/resourses/app_colors.dart';
 import 'package:services_galary/resourses/app_style.dart';
 import 'package:services_galary/screens/home_page_screen/home_page_screen.dart';
 import 'package:services_galary/screens/loginscreen/login_screen.dart';
-import 'package:services_galary/screens/myrequests_screen/my_requests_screen.dart';
+
 import 'package:services_galary/screens/myservices_screen/my_services.dart';
 
 import 'package:services_galary/screens/profile_screen/myprofile_screen.dart';
@@ -26,7 +26,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   static const List _pages = [
     HomePageScreen(),
     MyServisesScreen(),
-   MyRequestedScreen(),
+  //  TestTwoScreen(),
     MyProfileScreen()
   ];
   int _selectedIndex = 0;
@@ -35,6 +35,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
     return SafeArea(
         child: Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+        iconSize: 16.sp,
+
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.black,
         unselectedIconTheme: IconThemeData(
@@ -44,7 +46,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         selectedFontSize: 20,
         selectedIconTheme: IconThemeData(color: Colors.amberAccent, size: 20),
         selectedItemColor: ColorManager.activeDotColor,
-        selectedLabelStyle: TextStyle(fontSize: 20),
+        selectedLabelStyle: TextStyle(fontSize: 12),
         currentIndex: _selectedIndex,
         onTap: (int index) {
           setState(() {
@@ -57,6 +59,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
               Icons.home_outlined,
             ),
             label: 'Home',
+
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -64,12 +67,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
             ),
             label: 'My services',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.car_crash,
-            ),
-            label: 'My Requests',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     Icons.car_crash,
+          //   ),
+          //   label: 'My Requests ',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,

@@ -1,9 +1,11 @@
 import 'package:services_galary/bloc/LoginBloc/login_bloc.dart';
 import 'package:services_galary/bloc/all_categories/all_categories_bloc.dart';
+
+import 'package:services_galary/bloc/sign_up/sign_up_bloc.dart';
 import 'package:services_galary/bloc/create_service/create_srevice_bloc.dart';
 import 'package:services_galary/bloc/get_myservice/get_my_service_bloc.dart';
 
-import 'package:services_galary/bloc/signupbloc/sign_up_bloc.dart';
+
 import 'package:services_galary/repository/all_categories_repo.dart';
 import 'package:services_galary/repository/all_data_repo.dart';
 import 'package:services_galary/repository/all_services_repo.dart';
@@ -14,7 +16,8 @@ import 'package:services_galary/repository/get_my_data_service_repo.dart';
 import 'package:services_galary/repository/get_my_services_repo.dart';
 
 import 'package:services_galary/screens/home_page_screen/home_page_screen.dart';
-import 'package:services_galary/screens/test_screen.dart';
+
+
 
 import 'package:services_galary/utlis/cash_helper.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +48,10 @@ class MyApp extends StatelessWidget {
               create: (BuildContext context) =>
                   LoginBlocBloc(LoginRepository()),
             ),
+          
+            BlocProvider<SignUpBloc>(
+              create: (BuildContext context) => SignUpBloc(SignUp()),
+            ),
             BlocProvider<AllServicesBloc>(
                 create: (BuildContext context) =>
                     AllServicesBloc(GetAllDataRepo())
@@ -69,7 +76,7 @@ class MyApp extends StatelessWidget {
             ),
           ],
           child: MaterialApp(
-          //  home: TestScreen(),
+           
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primarySwatch: Colors.blue,

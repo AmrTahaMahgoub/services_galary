@@ -15,17 +15,13 @@ import 'package:services_galary/models/get_my_services.dart';
 import 'package:services_galary/models/sub_category_model.dart';
 import 'package:services_galary/repository/get_my_data_service_repo.dart';
 import 'package:services_galary/repository/get_my_services_repo.dart';
-
 import 'package:services_galary/resourses/app_colors.dart';
 import 'package:http/http.dart' as http;
 import 'package:services_galary/resourses/app_style.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:services_galary/screens/general_widgets/rating_bar.dart';
-
 import '../general_widgets/custom_elevated_blue_button.dart';
-import '../general_widgets/custom_listviewwithimagepricebookbutoon.dart';
+
 
 class MyServisesScreen extends StatefulWidget {
   const MyServisesScreen({super.key});
@@ -37,16 +33,15 @@ class MyServisesScreenState extends State<MyServisesScreen> {
   TextEditingController nameController = TextEditingController();
 
   TextEditingController priceController = TextEditingController();
-    TextEditingController subController = TextEditingController();
+  TextEditingController subController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
- getAllNewCategories();
+    getAllNewCategories();
     getAllCities();
     getAllNewSubCategories();
     BlocProvider.of<GetMyServiceBloc>(context).add(GetMyServicesSuccessEvent());
-   
   }
 
   int? categoryId;
@@ -74,7 +69,8 @@ class MyServisesScreenState extends State<MyServisesScreen> {
     // log('response body ${data}');
     var allCities = AllCitiesList.fromJson(jsonDecode(data)).allCitiesList;
 
-   // log('${allCities}');
+    // log('${allCities}');
+
     setState(() {
       citiesList = allCities;
     });
@@ -91,7 +87,7 @@ class MyServisesScreenState extends State<MyServisesScreen> {
   ];
 
   getAllNewSubCategories() {
-     subCategories;
+    subCategories;
   }
 
   @override
@@ -124,26 +120,11 @@ class MyServisesScreenState extends State<MyServisesScreen> {
               height: 50,
               child: AppBar(
                 backgroundColor: ColorManager.grey,
-                bottom: TabBar(
-                  tabs: [
-                    Tab(
-                      child: Text('waiting',
-                          style: AppTextStyleManager.tabbarstyle),
-                    ),
-                    Tab(
-                      child: Text('working',
-                          style: AppTextStyleManager.tabbarstyle),
-                    ),
-                    Tab(
-                      child: Text('finished',
-                          style: AppTextStyleManager.tabbarstyle),
-                    ),
-                  ],
-                ),
+        
               ),
             ),
 
-            // create widgets for each tab bar here
+        
             Expanded(
               child: BlocConsumer<GetMyServiceBloc, GetMyServiceState>(
                   listener: (context, state) {
@@ -246,7 +227,7 @@ class MyServisesScreenState extends State<MyServisesScreen> {
 
                       // second tab bar viiew widget
                       Container(
-                        color: ColorManager.GREEN_COLOR,
+                        color: Color.fromARGB(255, 204, 156, 0),
                         child: Column(
                           children: [
                             // CustomListviewwithImagePriceAndBookButton()
@@ -287,10 +268,7 @@ class MyServisesScreenState extends State<MyServisesScreen> {
                                 controller: nameController,
                                 label: 'service name',
                               ),
-                              //   CustomTextFeild(
-                              //   controller: subController,
-                              //   label: 'subcategory',
-                              // ),
+                             
                               CustomTextFeild(
                                   controller: priceController, label: 'price'),
                               DropdownButton(
@@ -353,7 +331,7 @@ class MyServisesScreenState extends State<MyServisesScreen> {
                                       BlocProvider.of<GetMyServiceBloc>(context)
                                           .add(GetMyServicesSuccessEvent());
                                       Navigator.pop(context);
-                                     // setState(() {});
+                                      // setState(() {});
                                     },
                                   );
                                 },

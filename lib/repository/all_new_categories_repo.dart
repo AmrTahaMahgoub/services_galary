@@ -8,7 +8,7 @@ import 'package:services_galary/models/get_my_data_service_model.dart';
 
 import '../models/all_categories_model.dart';
 import '../models/all_new_categories.dart';
-import '../models/all_services_model.dart';
+
 
 //AllSercices
 class GetAllNewCategoriesRepo {

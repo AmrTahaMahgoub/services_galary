@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:services_galary/general_widgets/custom_elevation_button.dart';
@@ -33,6 +34,12 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _showPassword = false;
+  void _togglevisibility() {
+    setState(() {
+      _showPassword = !_showPassword;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
         key: _formKey,
         child: ListView(
           children: <Widget>[
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10).r,
-                child: Image.asset(AppImagesManager.loginimage)),
+            SizedBox(height: 150.h),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0).r,
               child: CustomTextFeild(
@@ -58,36 +62,52 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                   }),
             ),
+            SizedBox(height: 10.h),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0).r,
               child: CustomTextFeild(
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      _togglevisibility();
+                    },
+                    child: Icon(
+                      _showPassword ? Icons.visibility : Icons.visibility_off,
+                      color: ColorManager.GreyTextColor,
+                    ),
+                  ),
+                  obsecuretext: !_showPassword,
                   controller: passwordController,
                   label: AppStringManager.password,
                   validation: (value) {
-                    if (value!.isEmpty || value == null) {
-                      return AppStringManager.feildRequired;
+                    if (value!.isEmpty || value.length < 8) {
+                      return 'password must be more than 8 charachters';
                     } else {
                       return null;
                     }
                   }),
             ),
-            CustomTextButton(
-                text: AppStringManager.forgotPassword,
-                onpressed: () {},
-                textstyle: AppTextStyleManager.bold12),
+            SizedBox(height: 200.h),
             Container(
               height: 70.h,
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0).r,
               child: BlocConsumer<LoginBlocBloc, LoginBlocState>(
                 listener: (context, state) async {
                   if (state is LoginBlocLoading) {
-                     ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('loading....')));
+                    var snackBar = const SnackBar(
+                        duration: Duration(microseconds: 10),
+                        backgroundColor: Colors.transparent,
+                        content: Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.red,
+                        )));
+
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else if (state is LoginBlocSuccess) {
-                    var settoken = await CacheHelper.saveData(
-                        "logintoken", state.loginModel.message!.token);
+                    log('state token ${state.token.message!.token}');
+                    var saveLogintoken = await CacheHelper.saveData(
+                        "logintoken", state.token.message!.token);
+
                     var gettoken = await CacheHelper.getData("logintoken");
-                    log('get login token screen :${gettoken}');
 
                     if (gettoken != null) {
                       // ignore: use_build_context_synchronously
@@ -98,18 +118,24 @@ class _LoginScreenState extends State<LoginScreen> {
                               const NavigationScreen(),
                         ),
                       );
+                    } else {
+                      var snackBar = const SnackBar(
+                          content: Text('your data do not match our records'));
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
-                  } 
-                  // else if (state is LoginFaluireState) {
-                  //   //               var snackBar = SnackBar(content: Text('${state.loginModel.errors}'));
-                  //   // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  // }
+                  } else if (state is LoginFaluireState) {
+                    var snackBar =
+                        SnackBar(content: Text('${state.error.errors!.data}'));
+                    log('state error: ${state.error.errors!.data}');
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 },
                 builder: (context, state) {
                   return CustomElevationButton(
                       text: AppStringManager.login,
                       backgroundColor: ColorManager.PRIMARY_COLOR,
-                      foregrounColor: ColorManager.SECONDRY_COLOR,
+                      foregrounColor: const Color.fromRGBO(239, 239, 239, 1),
                       onpressed: () async {
                         if (_formKey.currentState!.validate()) {
                           BlocProvider.of<LoginBlocBloc>(context).add(
@@ -131,7 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute<void>(
-                          builder: (BuildContext context) => SignUpScreen(),
+                          builder: (BuildContext context) =>
+                              const SignUpScreen(),
                         ),
                       );
                     },

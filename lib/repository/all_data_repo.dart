@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:services_galary/models/all_data_model.dart';
 
-import '../models/all_services_model.dart';
+
 
 class GetAllDataRepo {
 

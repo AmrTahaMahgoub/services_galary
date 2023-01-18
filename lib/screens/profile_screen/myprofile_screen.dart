@@ -53,9 +53,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 top: 65.r,
                 left: 190.r,
                 child: CircleAvatar(
-                  backgroundColor: ColorManager.YELLOW_COLOR,
+                  backgroundColor: ColorManager.WHITE_COLOR,
                   radius: 40.r,
-                  child: Image.asset(AppImagesManager.userImage),
+                  child: Image.asset(AppImagesManager.profileImage,height: 50.h,width: 50.w),
                 ),
               ),
             ],
@@ -100,13 +100,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   ),
                   CustomProfileInfo(
                     onTap: ()async {
-                    
-                      await CacheHelper.removeData('logintoken');
+                     await CacheHelper.removeData('logintoken');
+                     // await CacheHelper.removeData('signuptoken');
 
-                     await Navigator.popAndPushNamed(context, Log_In);
+                    await Navigator.popAndPushNamed(context, Log_In);
                     },
                     icondata: Icons.logout,
-                    title: 'sign out',
+                    title: 'log out',
                   ),
                 ],
               ),

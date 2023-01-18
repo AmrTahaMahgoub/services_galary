@@ -89,14 +89,14 @@ class EmailAnPasswordErrorModel {
 }
 
 class Errors {
-  List<String>? email;
-  List<String>? password;
+  List<dynamic>? email;
+  List<dynamic>? password;
 
   Errors({this.email, this.password});
 
   Errors.fromJson(Map<String, dynamic> json) {
-    email = json['email'].cast<String>();
-    password = json['password'].cast<String>();
+    email = json['email'];
+    password = json['password'];
   }
 
   Map<String, dynamic> toJson() {
@@ -125,3 +125,46 @@ class EmailErrorsModel {
     return data;
   }
 }
+/****************** */
+//messageanderrors
+// class MessageAndErrors {
+//   String? message;
+//   Errors? errors;
+
+//   MessageAndErrors({this.message, this.errors});
+
+//   MessageAndErrors.fromJson(Map<String, dynamic> json) {
+//     message = json['message'];
+//     errors =
+//         json['errors'] != null ? new Errors.fromJson(json['errors']) : null;
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['message'] = this.message;
+//     if (this.errors != null) {
+//       data['errors'] = this.errors!.toJson();
+//     }
+//     return data;
+//   }
+// }
+
+// class Errors {
+//   List<String>? email;
+//   List<String>? password;
+
+//   Errors({this.email, this.password});
+
+//   Errors.fromJson(Map<String, dynamic> json) {
+//     email = json['email'].cast<String>();
+//     password = json['password'].cast<String>();
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['email'] = this.email;
+//     data['password'] = this.password;
+//     return data;
+//   }
+// }
+

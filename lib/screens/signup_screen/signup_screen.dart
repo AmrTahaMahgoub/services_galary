@@ -1,27 +1,22 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:services_galary/bloc/LoginBloc/login_bloc.dart';
-import 'package:services_galary/bloc/signupbloc/sign_up_bloc.dart';
-import 'package:services_galary/models/get_all_cities_model.dart';
-import 'package:services_galary/repository/auth/signup_repo.dart';
+import 'package:services_galary/bloc/sign_up/sign_up_bloc.dart';
 
-import 'package:services_galary/screens/loginscreen/login_screen.dart';
+import 'package:services_galary/models/get_all_cities_model.dart';
+
 import 'package:services_galary/screens/navigation_button_screen/navigation_screen.dart';
+
 import 'package:services_galary/utlis/cash_helper.dart';
-import 'package:services_galary/utlis/routes.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:services_galary/general_widgets/custom_elevation_button.dart';
-import 'package:services_galary/general_widgets/custom_text_button.dart';
+
 import 'package:services_galary/general_widgets/custom_text_feild.dart';
 import 'package:services_galary/resourses/app_colors.dart';
 import 'package:services_galary/resourses/app_images.dart';
 import 'package:services_galary/resourses/app_string.dart';
 import 'package:services_galary/resourses/app_style.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,8 +33,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  //TextEditingController cityidController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    bool _showPassword = false;
+  void _togglevisibility() {
+    setState(() {
+      _showPassword = !_showPassword;
+    });
+  }
   /**** */
   int? cityId;
   List citiesList = [];
@@ -51,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // log('response body ${data}');
     var allCities = AllCitiesList.fromJson(jsonDecode(data)).allCitiesList;
 
-   // log('${allCities}');
+    // log('${allCities}');
     setState(() {
       citiesList = allCities;
     });
@@ -64,133 +64,151 @@ class _SignUpScreenState extends State<SignUpScreen> {
     getAllCities();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (BuildContext context) =>
-            SignUpBloc(SignUpRepository(), EmailandPasswordRepo(), EmailRepo()),
-        child: Scaffold(
-            body: Form(
-          key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(10).r,
-                  child: Image.asset(AppImagesManager.signUpimage)),
-              Container(
-                padding: const EdgeInsets.all(10).r,
-                child: CustomTextFeild(
-                    controller: nameController,
-                    label: AppStringManager.userName,
-                    validation: (value) {
-                      if (value!.isEmpty || value == null) {
-                        return AppStringManager.feildRequired;
-                      } else {
-                        return null;
-                      }
-                    }),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 0).r,
-                child: CustomTextFeild(
-                    controller: emailController,
-                    label: AppStringManager.email,
-                    validation: (value) {
-                      if (value!.isEmpty) {
-                        return AppStringManager.feildRequired;
-                      } else {
-                        return null;
-                      }
-                    }),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 0).r,
-                child: CustomTextFeild(
-                    controller: passwordController,
-                    label: AppStringManager.password,
-                    validation: (value) {
-                      if (value!.isEmpty || value == null) {
-                        return AppStringManager.feildRequired;
-                      } else {
-                        return null;
-                      }
-                    }),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 0).r,
-                child: DropdownButton(
-                    hint: Text('city name'),
-                    value: cityId,
-                    items: citiesList
-                        .map((e) => DropdownMenuItem(
-                              child: Text('${e['name']}'),
-                              value: e['id'],
-                            ))
-                        .toList(),
-                    onChanged: ((newvalue) {
-                      cityId = newvalue as int?;
-                      print('$cityId');
-                      getAllCities();
-                    })),
-              ),
-              Container(
-                  height: 70.h,
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0).r,
-                  child: BlocConsumer<SignUpBloc, SignUpState>(
-                    listener: (context, state) async {
-                      if (state is SignUpLoading) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('loading....')));
-                      } else if (state is SignUpSuccess) {
-                        var saveSignUptoken = await CacheHelper.saveData(
-                            "signuptoken", state.userModel.data!.token);
-
-                        if (saveSignUptoken != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((context) => NavigationScreen()),
-                            ),
-                          );
-                          var snackBar = SnackBar(
-                              content: Text('${state.userModel.message}'));
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                      } else if (state is SignUpEmailandPaswwordError) {
-                        var snackBar = SnackBar(
-                            content: Text(
-                                '${state.emailAndPaswwordError.message}${state.emailAndPaswwordError.errors!.email![0]} ${state.emailAndPaswwordError.errors!.password![0]}'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } else if (state is SignUpwithEmailError) {
-                        log('emaaaaaaaaaaaaaaaail error${state.emailError.email![0]}}');
-
-                        var snackBar = SnackBar(
-                            content: Text('${state.emailError.email![0]}'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    builder: (context, state) {
-                      return CustomElevationButton(
-                          text: AppStringManager.signUp,
-                          backgroundColor: ColorManager.PRIMARY_COLOR,
-                          foregrounColor: ColorManager.SECONDRY_COLOR,
-                          onpressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              BlocProvider.of<SignUpBloc>(context).add(
-                                  SignUpSuccessEvent(
-                                      nameController.text,
-                                      emailController.text,
-                                      passwordController.text,
-                                      cityId!,
-                                      ));
-                            }
-                          },
-                          textStyle: AppTextStyleManager.bold15);
-                    },
-                  )),
-            ],
+    return Scaffold(
+        body: Form(
+      key: _formKey,
+      child: ListView(
+        children: <Widget>[
+          SizedBox(height: 150.h),
+       
+          Container(
+            padding: const EdgeInsets.all(10).r,
+            child: CustomTextFeild(
+                controller: nameController,
+                label: AppStringManager.userName,
+                validation: (value) {
+                  if (value!.isEmpty) {
+                    return AppStringManager.feildRequired;
+                  } else {
+                    return null;
+                  }
+                }),
           ),
-        )));
+          SizedBox(height: 10.h),
+          Container(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0).r,
+            child: CustomTextFeild(
+                controller: emailController,
+                label: AppStringManager.email,
+                validation: (value) {
+                  if (value!.isEmpty) {
+                    return AppStringManager.feildRequired;
+                  } else {
+                    return null;
+                  }
+                }),
+          ),
+          SizedBox(height: 10.h),
+          Container(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0).r,
+            child: CustomTextFeild(
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    _togglevisibility();
+                  },
+                  child: Icon(
+                    _showPassword ? Icons.visibility : Icons.visibility_off,
+                    color: ColorManager.GreyTextColor,
+                  ),
+                ),
+                controller: passwordController,
+                 obsecuretext: !_showPassword,
+                label: AppStringManager.password,
+                validation: (value) {
+                  if (value!.isEmpty || value.length < 8) {
+                    return 'password must be more than 8 charachters';
+                  } else {
+                    return null;
+                  }
+                }),
+          ),
+          SizedBox(height: 10.h),
+          Container(
+            margin: const EdgeInsets.all(15.0).r,
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0).r,
+            decoration: BoxDecoration(
+              color: ColorManager.GreyTextColor,
+              border: Border.all(color: Colors.white),
+             borderRadius:BorderRadius.circular(20).r,
+            ),
+            child: DropdownButton(
+                dropdownColor: ColorManager.colorEEE,
+                alignment: AlignmentDirectional.center,
+                hint: Text('city name',style: AppTextStyleManager.bold14),
+                value: cityId,
+                items: citiesList
+                    .map((e) => DropdownMenuItem(
+                          child: Center(child: Text('${e['name']}',style: AppTextStyleManager.bold14)),
+                          value: e['id'],
+                        ))
+                    .toList(),
+                onChanged: ((newvalue) {
+                  cityId = newvalue as int?;
+                  print('$cityId');
+                  getAllCities();
+                })),
+          ),
+          Container(
+              height: 70.h,
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0).r,
+              child: BlocConsumer<SignUpBloc, SignUpState>(
+                listener: (context, state) async {
+                  if (state is SignUpLoading) {
+                  } else if (state is SignUploaded) {
+                    var saveSignUptoken =
+                        await CacheHelper.saveData("signuptoken", state.token);
+                    log('state token ${state.token}');
+
+                    log('saveSignUptoken ${saveSignUptoken}');
+
+                    if (saveSignUptoken != null) {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => NavigationScreen()),
+                        ),
+                      );
+                    } else {
+                      var snackBar = SnackBar(
+                          content: Text('this email has already been taken'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                      log('in else condition $saveSignUptoken');
+                    }
+                  } else if (state is SignUpfailure) {
+                    log("${state.error}");
+                    var snackBar = SnackBar(content: Text('${state.error}'));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is SignUpLoading) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return CustomElevationButton(
+                      text: AppStringManager.signUp,
+                      backgroundColor: ColorManager.PRIMARY_COLOR,
+                      foregrounColor: ColorManager.SECONDRY_COLOR,
+                      onpressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          BlocProvider.of<SignUpBloc>(context)
+                              .add(SignUpSuccessEvent(
+                            nameController.text,
+                            emailController.text,
+                            passwordController.text,
+                            cityId!,
+                          ));
+                        }
+                      },
+                      textStyle: AppTextStyleManager.bold15);
+                },
+              )),
+        ],
+      ),
+    ));
   }
 }

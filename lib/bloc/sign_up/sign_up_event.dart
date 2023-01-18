@@ -1,9 +1,10 @@
 part of 'sign_up_bloc.dart';
 
-abstract class SignUpEvent  {
+abstract class SignUpEvent extends Equatable {
   const SignUpEvent();
 
-  
+  @override
+  List<Object> get props => [];
 }
 
 class SignUpSuccessEvent extends SignUpEvent {
@@ -12,6 +13,4 @@ class SignUpSuccessEvent extends SignUpEvent {
   String password;
   int cityId;
   SignUpSuccessEvent(this.name, this.email, this.password, this.cityId);
-
 }
-// 

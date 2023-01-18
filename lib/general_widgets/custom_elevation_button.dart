@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomElevationButton extends StatelessWidget {
   CustomElevationButton(
@@ -22,7 +23,7 @@ class CustomElevationButton extends StatelessWidget {
                foregrounColor, //change background color of button
           backgroundColor: backgroundColor, //change text color of button
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20).r,
           ),
         ),
         child: Text(

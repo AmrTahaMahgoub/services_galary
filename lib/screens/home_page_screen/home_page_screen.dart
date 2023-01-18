@@ -1,15 +1,12 @@
 import 'dart:developer';
-
 import 'package:services_galary/bloc/all_categories/all_categories_bloc.dart';
 import 'package:services_galary/bloc/all_services/all_services_bloc.dart';
-import 'package:services_galary/models/all_services_model.dart';
 import 'package:services_galary/models/all_data_model.dart';
 import 'package:services_galary/repository/all_data_repo.dart';
 import 'package:services_galary/repository/all_services_repo.dart';
 import 'package:services_galary/resourses/app_colors.dart';
 import 'package:services_galary/resourses/app_images.dart';
 import 'package:services_galary/resourses/app_style.dart';
-import 'package:services_galary/screens/general_widgets/custom_listviewbuilserimageandprice.dart';
 import 'package:services_galary/screens/general_widgets/custom_search_textformfeild.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -20,9 +17,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../repository/get_my_services_repo.dart';
-import '../general_widgets/custom_listviewwithimagepricebookbutoon.dart';
-import '../general_widgets/custom_rowdesignerdatawithbookbutton.dart';
-import '../general_widgets/rating_bar.dart';
+
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});
@@ -45,6 +40,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+  //  BlocProvider.of(context).add(AllServicesLoadedEvent());
   }
 
   @override
@@ -77,7 +73,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Caregories'),
-                      Text('See all'),
+                      
                     ],
                   ),
                 ),
@@ -134,7 +130,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Offers & packages'),
-                      Text('see all'),
+                    
                     ],
                   ),
                   SizedBox(
@@ -152,35 +148,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       Text('256 EG', style: AppTextStyleManager.priceStyle),
                     ],
                   ),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                          child: Image.asset(AppImagesManager.userImage)),
-                      Text('designer / ibrahem'),
-                      Spacer(),
-                      InkWell(
-                        onTap: () {
-                          // log('${GetMyServicesRepo().getMyServices()}');
-                        },
-                        child: Container(
-                          width: 70.0,
-                          height: 30.0,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            //border: new Border.all( width: 2.0),
-                            borderRadius: new BorderRadius.circular(8.0),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'book',
-                              style: TextStyle(
-                                  fontSize: 15.0, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+             
                 ],
               ),
             ),
@@ -192,24 +160,24 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Different Services '),
-                      Text('see all'),
+                  
                     ],
                   ),
                 ),
                 SizedBox(
-                  height: 150.h,
+                  height: 500.h,
                   child: BlocConsumer<AllServicesBloc, AllServicesState>(
                       listener: (context, state) {
                     if (state is AllServicesLoadingState) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(state.message)));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.message)));
                     } else if (state is AllServicesSuccessState &&
                         state.allData.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('No more users')));
                     } else if (state is AllServicesErrorState) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(state.message)));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.message)));
                       BlocProvider.of<AllServicesBloc>(context).isFetching =
                           false;
                     }
@@ -219,7 +187,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
                         state is AllServicesLoadingState && newData.isEmpty) {
                       return Container(
                           child: Center(child: CircularProgressIndicator()));
-                    
                     } else if (state is AllServicesSuccessState) {
                       newData.addAll(state.allData);
                       BlocProvider.of<AllServicesBloc>(context).isFetching =
@@ -249,7 +216,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       controller: _scrollController
                         ..addListener(() {
                           if (_scrollController.offset ==
-                                  _scrollController.position.maxScrollExtent &&
+                                  _scrollController
+                                      .position.maxScrollExtent &&
                               !BlocProvider.of<AllServicesBloc>(context)
                                   .isFetching) {
                             BlocProvider.of<AllServicesBloc>(context)
@@ -257,7 +225,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               ..add(AllServicesLoadedEvent());
                           }
                         }),
-                      // physics: ClampingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: newData.length,
                       itemBuilder: (context, index) => Container(
@@ -269,8 +236,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
                             Image.asset('assets/images/space_joy.jpg'),
                             Column(
                               children: [
-                                Text('${newData[index].id}'),
                                 Text('${newData[index].category}'),
+                                Text('${newData[index].subCategory}'),
                                 Text('${newData[index].description}'),
                               ],
                             ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:services_galary/resourses/app_colors.dart';
 import 'package:services_galary/resourses/app_string.dart';
 import 'package:services_galary/resourses/app_style.dart';
@@ -21,8 +22,7 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   countDownTime() {
     
-        // Navigator.of(context).pushReplacement(
-        //     MaterialPageRoute(builder: (BuildContext context) => Onboarding()));
+
      Timer(Duration(seconds: 3), () {
            String? uid =  CacheHelper.getData("logintoken");
         if (uid != null) {
@@ -45,18 +45,28 @@ class _SplashState extends State<Splash> {
    
 
     super.initState();
-    //  Timer(Duration(seconds: 3), () async {
-    //   Navigator.of(context).pushReplacement(
-    //       MaterialPageRoute(builder: (BuildContext context) => Onboarding()));
-    // });
+   
     countDownTime();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.GREEN_COLOR,
-      body: Center(child: Text(AppStringManager.monoServices, style: AppTextStyleManager.bold24)),
+      backgroundColor: ColorManager.lightGrey,
+      body: Center(
+        child: AnimatedTextKit(
+				animatedTexts: [
+				RotateAnimatedText('MONOSERVICE',
+					textStyle:AppTextStyleManager.bold22),
+			
+				
+				],
+				isRepeatingAnimation: true,
+				totalRepeatCount: 10,
+				pause: Duration(milliseconds: 1000),
+			),
+      ),
+
     );
   }
 }

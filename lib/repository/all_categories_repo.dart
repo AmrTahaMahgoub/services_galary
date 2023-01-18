@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 import '../models/all_categories_model.dart';
-import '../models/all_services_model.dart';
+
 
 //AllSercices
 class GetAllCategoriesRepo {

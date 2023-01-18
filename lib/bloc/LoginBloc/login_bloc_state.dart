@@ -1,25 +1,19 @@
 part of 'login_bloc.dart';
 
 @immutable
-abstract class LoginBlocState  {}
+abstract class LoginBlocState {}
 
-class LoginBlocInitial extends LoginBlocState {
- 
-}
+class LoginBlocInitial extends LoginBlocState {}
 
-class LoginBlocLoading extends LoginBlocState {
-  
- 
-}
+class LoginBlocLoading extends LoginBlocState {}
 
 class LoginBlocSuccess extends LoginBlocState {
-  LoginBlocSuccess({required this.loginModel});
-  late LoginModel loginModel;
-
+  LoginBlocSuccess({required this.token});
+  final LoginModel token;
 }
 
-// class LoginFaluireState extends LoginBlocState {
-//   LoginModel loginModel;
-//   LoginFaluireState(this.loginModel);
-  
-// }
+class LoginFaluireState extends LoginBlocState {
+ LoginModelErrors error;
+  LoginFaluireState(this.error);
+ 
+}

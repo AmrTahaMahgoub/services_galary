@@ -11,11 +11,10 @@ class AppImagesManager {
   static const signUpimage = '$assets${images}signup.jpg';
   static const userImage = '$assets${images}user.png';
   static const cameraImage = '$assets${images}camera.jpeg';
-  //static const livingRoom = assets + images + 'living_room.jpg';
-// 'assets/images/services/categories/gardens.svg',
-//     'assets/images/services/categories/cleaning.svg',
-//     'assets/images/services/categories/electricity.svg',
-//     'assets/images/services/categories/plunger.svg'
+   static const profileImage = '$assets${images}profile.png';
+   //C:\Users\ALaqsa\Pictures\Screenshots\services_galary\assets\images\profile.png
+
+
   static const gardenSvg =
       '$assets$images$services${categories}gardens.svg';
   static const cleaningSvg =
@@ -24,6 +23,6 @@ class AppImagesManager {
       '$assets$images$services${categories}electricity.svg';
   static const plungerSvg =
       '$assets$images$services${categories}plunger.svg';
-  //assets\images\services\living_room.jpg
+  
   static const livingRoom = '$assets$images${services}living_room.jpg';
 }
